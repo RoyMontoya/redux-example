@@ -1,21 +1,42 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
+import React, {Component} from 'react';
 import './App.css';
+import {connect} from 'react-redux';
+import {increment, decrement} from './actions/index'
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.onIncrement = this.onIncrement.bind(this);
+    this.onDecrement = this.onDecrement.bind(this);
+  }
+
+  onIncrement(e) {
+    this.props.onIncrement();
+  }
+  onDecrement(e) {
+    this.props.onDecrement();
+  }
   render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+    return (<div className="App">
+      <h2>Contador</h2>
+      <label>{this.props.counter}</label>
+      <div>
+        <button onClick={this.onIncrement}>Incrementar</button>
+        <button onClick={this.onDecrement}>Decrementar</button>
       </div>
-    );
+    </div>);
   }
 }
 
-export default App;
+const mapStateToProps = (value) => {
+  return {counter: value}
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onIncrement: () => dispatch(increment()),
+    onDecrement: () => dispatch(decrement())
+  }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
